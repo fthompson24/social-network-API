@@ -1,33 +1,7 @@
 const { Schema, model, Types } = require('mongoose');
 
-const ThoughtSchema = new Schema (
-    {
-        thoughtText: {
-            type: String,
-            required: true,
-            minlength: 1,
-            maxlength: 280
-        },
-        createdAt: {
-            type: Date,
-            default: Date.now,
-        },
-        username: {
-            type: String,
-            required: true,
-            ref: 'User'
-        },
-        reactions: [ReactionSchema],
-    },
-    {
-      toJSON: {
-        virtuals: true,
-        getters: true
-      },
-      id: false
-  }
-);
 
+//create Reaction schema for ThoughtSchema
 const ReactionSchema = new Schema(
     {
       reactionId: {
@@ -57,12 +31,42 @@ const ReactionSchema = new Schema(
     }
 );
 
+// create schema to create Thought model
+const ThoughtSchema = new Schema (
+    {
+        thoughtText: {
+            type: String,
+            required: true,
+            minlength: 1,
+            maxlength: 280
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now,
+        },
+        username: {
+            type: String,
+            required: true,
+            ref: 'User'
+        },
+        reactions: [ReactionSchema],
+    },
+    {
+      toJSON: {
+        virtuals: true,
+        getters: true
+      },
+      id: false
+    }
+);
+
+// create Thought nodel using schema
 const Thought = model('Thought', ThoughtSchema);
 
-//
-  ThoughtSchema.virtual('reactionCount').get(function() {
+//get total count of reactions on retrieval
+ThoughtSchema.virtual('reactionCount').get(function() {
     return this.reactions.length;
 });
 
-
+//export Thought model to index.js
 module.exports = Thought;
