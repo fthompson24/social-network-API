@@ -43,14 +43,13 @@ const thoughtController = {
                     { new: true }
                 );
             })
-            .then(dbUserData => {
-                if (!dbUserData) {
-                    res.status(404).json({ message: 'No user found with this username!' });
-                    return;
-                }
-                res.json(dbUserData);
+            .then(({ _id, _doc }) => {
+                return User.findOneAndUpdate(
+                    { username: body.username },
+                    { $push: { thoughts: _id } },
+                ).then(res.json(_doc))
             })
-            .catch(err => res.json(err));
+            .catch(err => res.status(400).json(err));
     },
     //update one thought by id
     updateThought({ params, body }, res) {
@@ -77,18 +76,18 @@ const thoughtController = {
         .catch(err => res.json(err));
     },
     //add reaction to one thought by thoughtId
-    addReaction ({ params, body}, res) {
+    addReaction({ params, body }, res) {
         Thought.findOneAndUpdate(
-            { _id: params.thoughtId },
-            { $push: { reactions: body } },
-            { new: true, runValidators: true }
+          { _id: params.id },
+          { $push: {reactions: body } },
+          { new: true }
         )
         .then(dbThoughtData => {
             if (!dbThoughtData) {
-                res.status(404).json({ message: 'No thought with this ID!' });
-                return;
+              res.status(404).json({ message: 'No thought found with this id!' });
+              return;
             }
-            res.json(dbThoughtData)
+            res.json(dbThoughtData);
         })
         .catch(err => res.json(err));
     },
