@@ -1,4 +1,4 @@
-# Social Network API
+# Social Media API
   ![badge](https://img.shields.io/badge/license-MIT-informational)
 
   ## Description:
@@ -24,7 +24,7 @@
 ![alt text](assets/images/screenshot.PNG)
 
 ## Video Walkthrough
-#### 
+#### https://youtu.be/wB8DPzdLDGc
 
 ## Contributors:
 #### Fraser Thompson
